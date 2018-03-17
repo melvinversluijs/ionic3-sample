@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
+import { Platform } from 'ionic-angular';
 
 declare var cordova: any;
 
@@ -9,28 +10,30 @@ declare var cordova: any;
 })
 export class HomePage {
 
-  constructor(protected camera: Camera) {
+  constructor(protected camera: Camera, protected platform: Platform) {
 
   }
 
   scan(input: string) {
 
+    // Get input (camera vs photo library)
     let type = this.camera.PictureSourceType.PHOTOLIBRARY;
-
     if (input == 'camera') {
       type = this.camera.PictureSourceType.CAMERA;
     }
 
-    if (cordova !== undefined) {
+    // Set Camera Options
+    const cameraOptions: CameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      sourceType: type,
+      allowEdit: false
+    }
 
-      const cameraOptions: CameraOptions = {
-        quality: 100,
-        destinationType: this.camera.DestinationType.FILE_URI,
-        encodingType: this.camera.EncodingType.JPEG,
-        mediaType: this.camera.MediaType.PICTURE,
-        sourceType: type,
-        allowEdit: false
-      }
+    // Check if Cordova is ready
+    this.platform.ready().then(() => {
 
       this.camera.getPicture(cameraOptions).then((imageData) => {
 
@@ -48,9 +51,7 @@ export class HomePage {
         console.log(error);
       });
 
-    } else {
-      console.log('fail');
-    }
-  }
+    });
 
+  }
 }
