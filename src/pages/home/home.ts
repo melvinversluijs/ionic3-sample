@@ -1,7 +1,8 @@
+import { ResultPage } from './../result/result';
 import { Component } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { OpenALPR, OpenALPROptions, OpenALPRResult } from '@ionic-native/openalpr';
-import { AlertController } from 'ionic-angular';
+import { AlertController, ModalController } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -9,7 +10,9 @@ import { AlertController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(private camera: Camera, private openALPR: OpenALPR, private alertCtrl: AlertController) {
+  private country: string;
+
+  constructor(private camera: Camera, private openALPR: OpenALPR, private alertCtrl: AlertController, private modalCtrl: ModalController) {
 
   }
 
@@ -21,7 +24,7 @@ export class HomePage {
 
     const cameraOptions: CameraOptions = {
       quality: 100,
-      destinationType: this.camera.DestinationType.FILE_URI,
+      destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
       sourceType: (input === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY),
@@ -49,6 +52,7 @@ export class HomePage {
           }).catch((error: Error) => console.error(error));
       }).catch((error: Error) => console.error(error));
 
+    this.camera.cleanup();
   }
 
   /**
@@ -70,13 +74,8 @@ export class HomePage {
    * @param result {OpenALPRResult}
    */
   showResult(result: OpenALPRResult) {
-    const alert = this.alertCtrl.create({
-      title: 'Scan complete',
-      message: `${result.number} (${result.confidence})`,
-      buttons: ['OK']
-    });
-
-    alert.present();
+    const modal = this.modalCtrl.create(ResultPage, { licensePlate: result.number });
+    modal.present();
   }
-  
+
 }
