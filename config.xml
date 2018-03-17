@@ -82,6 +82,9 @@
         <config-file parent="NSPhotoLibraryUsageDescription" platform="ios" target="*-Info.plist">
             <string>Allow the app to access your photos</string>
         </config-file>
+        <config-file parent="NSPhotoLibraryAddUsageDescription" platform="ios" target="*-Info.plist">
+            <string>Allow the app to access your photos</string>
+        </config-file>
         <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
             <string>Allow the app to access your camera</string>
         </config-file>
@@ -91,8 +94,8 @@
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
-    <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
     <plugin name="cordova-plugin-openalpr" spec="/Users/melvin/Projects/Cordova/cordova-plugin-openalpr" />
     <plugin name="cordova-plugin-camera" spec="^4.0.2" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.4.1" />
     <engine name="ios" spec="4.5.4" />
 </widget>

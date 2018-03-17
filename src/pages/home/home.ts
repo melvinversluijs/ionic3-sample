@@ -14,14 +14,14 @@ export class HomePage {
   }
 
   scan() {
-    console.log('triggered');
-    console.log(cordova);
     if (cordova !== undefined) {
       const cameraOptions: CameraOptions = {
-        quality: 80,
+        quality: 100,
         destinationType: this.camera.DestinationType.FILE_URI,
         encodingType: this.camera.EncodingType.JPEG,
-        mediaType: this.camera.MediaType.PICTURE
+        mediaType: this.camera.MediaType.PICTURE,
+        sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+        allowEdit: false
       }
 
       this.camera.getPicture(cameraOptions).then((imageData) => {
