@@ -17,6 +17,9 @@
     &nbsp; Select picture
   </button>
 
+  <ion-item *ngFor="let country of countries">
+    {{country}}
+  </ion-item>
 
 </ion-content>
 
@@ -25,9 +28,15 @@
     <ion-list>
       <ion-item>
         <ion-label>Country</ion-label>
-        <ion-select>
+        <ion-select [(ngModel)]="scanOptions.country">
+          <ion-option value="au">AU</ion-option>
+          <ion-option value="br">BR</ion-option>
+          <ion-option value="br2">BR2</ion-option>
           <ion-option value="eu" selected="true">EU</ion-option>
+          <ion-option value="in">IN</ion-option>
+          <ion-option value="kr2">KR2</ion-option>
           <ion-option value="us">US</ion-option>
+          <ion-option value="vn2">VN2</ion-option>
         </ion-select>
       </ion-item>
     </ion-list>

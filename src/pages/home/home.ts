@@ -10,9 +10,23 @@ import { AlertController, ModalController } from 'ionic-angular';
 })
 export class HomePage {
 
-  private country: string;
+  private cameraOptions: CameraOptions;
+  public scanOptions: OpenALPROptions;
 
   constructor(private camera: Camera, private openALPR: OpenALPR, private alertCtrl: AlertController, private modalCtrl: ModalController) {
+
+    this.cameraOptions = {
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE,
+      allowEdit: false
+    }
+
+    this.scanOptions = {
+      country: this.openALPR.Country.EU,
+      amount: 3
+    }
 
   }
 
@@ -22,23 +36,12 @@ export class HomePage {
    */
   scan(input: string) {
 
-    const cameraOptions: CameraOptions = {
-      quality: 100,
-      destinationType: this.camera.DestinationType.DATA_URL,
-      encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      sourceType: (input === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY),
-      allowEdit: false
-    }
+    this.cameraOptions.sourceType = (input === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY);
 
-    const scanOptions: OpenALPROptions = {
-      country: this.openALPR.Country.EU,
-      amount: 3
-    }
-
-    this.camera.getPicture(cameraOptions)
+    this.camera.getPicture(this.cameraOptions)
       .then((imageData) => {
-        this.openALPR.scan(imageData, scanOptions)
+
+        this.openALPR.scan(imageData, this.scanOptions)
           .then((result: [OpenALPRResult]) => {
 
             if (result.length < 1) {
