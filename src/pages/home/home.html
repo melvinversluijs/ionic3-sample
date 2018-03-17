@@ -7,5 +7,13 @@
 </ion-header>
 
 <ion-content padding>
-  <button ion-button full (click)='scan();'>Scan</button>
+  <button ion-button full (click)="scan('camera');">
+    <ion-icon name="qr-scanner"></ion-icon> 
+    Take picture
+  </button>
+  <button ion-button full (click)="scan('library');">
+    <ion-icon name="images"></ion-icon> 
+    Use picture
+  </button>
+
 </ion-content>
