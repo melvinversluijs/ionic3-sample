@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
-import { Camera, CameraOptions } from '@ionic-native/camera';
-import { OpenALPR, OpenALPROptions, OpenALPRResult } from '@ionic-native/openalpr';
-import { AlertController, ModalController, NavParams, ViewController } from 'ionic-angular';
+import { NavParams, ViewController } from 'ionic-angular';
 
 @Component({
     selector: 'modal-result',
