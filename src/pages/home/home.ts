@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { Platform } from 'ionic-angular';
-
-declare var cordova: any;
+import { OpenALPR, OpenALPROptions, OpenALPRResult } from '@ionic-native/openalpr';
+import { AlertController } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -10,48 +9,74 @@ declare var cordova: any;
 })
 export class HomePage {
 
-  constructor(protected camera: Camera, protected platform: Platform) {
+  constructor(private camera: Camera, private openALPR: OpenALPR, private alertCtrl: AlertController) {
 
   }
 
+  /**
+   * Take picture and send it to OpenALPR
+   * @param input 
+   */
   scan(input: string) {
 
-    // Get input (camera vs photo library)
-    let type = this.camera.PictureSourceType.PHOTOLIBRARY;
-    if (input == 'camera') {
-      type = this.camera.PictureSourceType.CAMERA;
-    }
-
-    // Set Camera Options
     const cameraOptions: CameraOptions = {
       quality: 100,
       destinationType: this.camera.DestinationType.FILE_URI,
       encodingType: this.camera.EncodingType.JPEG,
       mediaType: this.camera.MediaType.PICTURE,
-      sourceType: type,
+      sourceType: (input === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY),
       allowEdit: false
     }
 
-    // Check if Cordova is ready
-    this.platform.ready().then(() => {
+    const scanOptions: OpenALPROptions = {
+      country: this.openALPR.Country.EU,
+      amount: 3
+    }
 
-      this.camera.getPicture(cameraOptions).then((imageData) => {
+    this.camera.getPicture(cameraOptions)
+      .then((imageData) => {
+        this.openALPR.scan(imageData, scanOptions)
+          .then((result: [OpenALPRResult]) => {
 
-        cordova.plugins.OpenALPR.scan(
-          imageData,
-          (response) => {
-            console.log(response)
-          },
-          (error) => {
-            console.log(error)
-          }
-        );
+            if (result.length < 1) {
+              this.showError('No license plates found');
+              return;
+            }
 
-      }, (error) => {
-        console.log(error);
-      });
+            const bestResult = result[0];
+            this.showResult(bestResult);
 
-    });
+          }).catch((error: Error) => console.error(error));
+      }).catch((error: Error) => console.error(error));
 
   }
+
+  /**
+   * Show error using a popup
+   * @param text {string}
+   */
+  showError(text: string) {
+    const alert = this.alertCtrl.create({
+      title: 'Error',
+      subTitle: text,
+      buttons: ['OK']
+    });
+
+    alert.present();
+  }
+
+  /**
+   * Show result using a popup
+   * @param result {OpenALPRResult}
+   */
+  showResult(result: OpenALPRResult) {
+    const alert = this.alertCtrl.create({
+      title: 'Scan complete',
+      message: `${result.number} (${result.confidence})`,
+      buttons: ['OK']
+    });
+
+    alert.present();
+  }
+  
 }
