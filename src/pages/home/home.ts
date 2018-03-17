@@ -51,23 +51,32 @@ export class HomePage {
 
   }
 
+  /**
+   * Show error using a popup
+   * @param text {string}
+   */
   showError(text: string) {
     const alert = this.alertCtrl.create({
       title: 'Error',
       subTitle: text,
-      buttons: ['Ok!']
+      buttons: ['OK']
     });
 
     alert.present();
   }
 
+  /**
+   * Show result using a popup
+   * @param result {OpenALPRResult}
+   */
   showResult(result: OpenALPRResult) {
     const alert = this.alertCtrl.create({
       title: 'Scan complete',
       message: `${result.number} (${result.confidence})`,
-      buttons: ['Ok!']
+      buttons: ['OK']
     });
 
     alert.present();
   }
+  
 }
