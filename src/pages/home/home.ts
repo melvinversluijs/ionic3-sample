@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { OpenALPR, OpenALPROptions, OpenALPRResult } from '@ionic-native/openalpr';
 import { AlertController, ModalController } from 'ionic-angular';
+import { Platform } from 'ionic-angular';
 
 @Component({
   selector: 'page-home',
@@ -13,14 +14,13 @@ export class HomePage {
   private cameraOptions: CameraOptions;
   public scanOptions: OpenALPROptions;
 
-  constructor(private camera: Camera, private openALPR: OpenALPR, private alertCtrl: AlertController, private modalCtrl: ModalController) {
+  constructor(private camera: Camera, private openALPR: OpenALPR, private alertCtrl: AlertController, private modalCtrl: ModalController, private platform: Platform) {
 
     this.cameraOptions = {
-      quality: 100,
+      quality: 80,
       destinationType: this.camera.DestinationType.DATA_URL,
       encodingType: this.camera.EncodingType.JPEG,
-      mediaType: this.camera.MediaType.PICTURE,
-      allowEdit: false
+      mediaType: this.camera.MediaType.PICTURE
     }
 
     this.scanOptions = {
@@ -35,12 +35,11 @@ export class HomePage {
    * @param input 
    */
   scan(input: string) {
-
-    this.cameraOptions.sourceType = (input === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY);
+    this.cameraOptions.sourceType = input === 'camera' ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY;
 
     this.camera.getPicture(this.cameraOptions)
       .then((imageData) => {
-
+        
         this.openALPR.scan(imageData, this.scanOptions)
           .then((result: [OpenALPRResult]) => {
 
@@ -55,7 +54,9 @@ export class HomePage {
           }).catch((error: Error) => console.error(error));
       }).catch((error: Error) => console.error(error));
 
-    this.camera.cleanup();
+    if (this.platform.is('ios')) {
+      this.camera.cleanup();
+    }
   }
 
   /**
