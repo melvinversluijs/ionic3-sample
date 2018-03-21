@@ -1,9 +1,8 @@
-import { ResultPage } from './../result/result';
 import { Component } from '@angular/core';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { OpenALPR, OpenALPROptions, OpenALPRResult } from '@ionic-native/openalpr';
-import { AlertController, ModalController } from 'ionic-angular';
-import { Platform } from 'ionic-angular';
+import { OpenALPR, OpenALPROptions, OpenALPRResult } from 'cordova-plugin-openalpr/native';
+import { AlertController, ModalController, Platform } from 'ionic-angular';
+import { ResultPage } from './../result/result';
 
 @Component({
   selector: 'page-home',
