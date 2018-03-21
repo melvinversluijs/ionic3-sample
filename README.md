@@ -1,2 +1,2 @@
-# Ionic 2 Sample project
+# Ionic 3 Sample project
 This sample project will be used to demonstrate the usage of the Cordova OpenALPR plugin.

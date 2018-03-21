@@ -1,14 +1,44 @@
 <ion-header>
   <ion-navbar>
     <ion-title>
-      Ionic Blank
+      LicensePlate Scanner
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
-  </p>
+
+  <button ion-button full (click)="scan('camera');">
+    <ion-icon name="qr-scanner"></ion-icon>
+    &nbsp; Take picture
+  </button>
+  <button ion-button full color="dark" (click)="scan('library');">
+    <ion-icon name="images"></ion-icon>
+    &nbsp; Select picture
+  </button>
+
+  <ion-item *ngFor="let country of countries">
+    {{country}}
+  </ion-item>
+
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-list>
+      <ion-item>
+        <ion-label>Country</ion-label>
+        <ion-select [(ngModel)]="scanOptions.country">
+          <ion-option value="au">AU</ion-option>
+          <ion-option value="br">BR</ion-option>
+          <ion-option value="br2">BR2</ion-option>
+          <ion-option value="eu" selected="true">EU</ion-option>
+          <ion-option value="in">IN</ion-option>
+          <ion-option value="kr2">KR2</ion-option>
+          <ion-option value="us">US</ion-option>
+          <ion-option value="vn2">VN2</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </ion-toolbar>
+</ion-footer>
